@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap');
 /* Universal Selectors */
 :root {
     
@@ -10,7 +11,7 @@
 }
 
  body {
-    background-image: url(/assets/Images/Scattered\Question\ Marks.jpg);
+    background-image: url(/assets/Images/quiz-background-image.jpg);
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -87,4 +88,3 @@
  }
 
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap')
