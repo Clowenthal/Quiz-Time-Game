@@ -11,10 +11,10 @@
 }
 
  body {
-    background-image: url(/assets/Images/quiz-background-image.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
-}
+   background-image: url(/assets/Images/quiz-background-image.jpg);
+   background-size: cover;
+ }
+
 
  h1 {
     font-size: 60px;
@@ -29,11 +29,14 @@
  }
 /* class Selectors */
  .container {
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    max-width: 80rem;
+    padding: 2rem;
+
  }
 
  .flex-column {

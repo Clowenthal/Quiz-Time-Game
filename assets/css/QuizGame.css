@@ -1,17 +1,11 @@
-body {
-    color: whitesmoke;
-    
-}
-
 .word-container {
     display: flexbox;
-    width: 50%;
-    margin-bottom: 5px;
+    width: 100%;
+    margin-bottom: 0.8rem;
     border-radius: 10px;
     font-size: 20px;
     min-width: 40rem;
-    background-color:  olivedrab;
-    justify-content: space-between;
+    background:  olivedrab;
 }
 
 .word-container:hover {
