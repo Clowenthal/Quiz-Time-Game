@@ -10,6 +10,8 @@
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
         </head>
     <body>
+        <!-- Front page of the quiz. Here you'll see the start of the front page. Timer, highscores link button
+        and the start button to begin the game -->
         <div class="scores"><a href="QuizHighScore.html"><button class="highscores">HighScores<i class="fa-regular fa-star"></i></button></a></div>
         <div class="timer">Time: <span id="time">0</span></div>
         <div class="wrapper">
@@ -17,12 +19,14 @@
                 <h1><span>B</span>eat <span>T</span>he <span>C</span>lock</h1>
                 <p>In this game challenge you'll be asked a series of multiple choice questions. Each incorrect answer will deduct your time by 10 seconds! Enter your initials at the end to keep track of your high scores. Beat the clock.</p>
             <button id="start">Click to start!</button>
-            </div>   
+            </div>  
+             <!--on click of the start button you'll be directed to the questions with choices to choose from
+              which will rap through all the questions until you answer the last one then you're directed to the end page
+            to enter your initials, by clicking submit your initials are entered into the local storage to be filed until you clear the score sheet-->
             <div id="questions" class="hide">
                 <h2 id="question-title"></h2>
                 <div id="choices" class="choices"></div>
             </div>
-
             <div id="closing-page" class="hide">
                 <h2>Congrats!</h2>
                 <p>Your score <span id="final-score"></span></p>
