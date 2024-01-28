@@ -1,104 +1,130 @@
-// Variable Identifiers
-var question = document.querySelector('#question');
-var choices = Array.from(document.querySelectorAll('.word-index'));
-var text = document.querySelector('#showQuestion');
-var scoreCal = document.querySelector('#score');
-var barStack = document.querySelector('#barStack');
+// Quiz Question and timer DOM variables
+var currentQuestionIndex = 0;
+var time = questions.length * 15;
+var timerId;
 
-// declare a variable that is block scoped in JavaScript
-let currentQuestions = {}
-let answers = true
-let score = 0
-let questionCount = 0
-let questionAvail = []
+//DOM Variables
+var questionsEl = document.getElementById ("questions");
+var timerEl = document.getElementById ("time");
+var choicesEl = document.getElementById ("choices");
+var submitBtn = document.getElementById ("submit");
+var startBtn = document.getElementById ("start");
+var initialsEl = document.getElementById ("initials");
+var alertEl = document.getElementById ("alert");
+// calling the start quiz function
+// calling the timer element and grabing the questions
+function startQuiz() {
+var frontPageEl = document.getElementById("front-page");
+    frontPageEl.setAttribute("class", "hide");
+    questionsEl.removeAttribute("class");
+    timerId = setInterval(clockTick, 1000);
+    timerEl.textContent = time;
 
-// Identifying the multipule choice questions being called from the HTML class and id
-let questions = [
-    {
-        Question: 'What is HTML?',
-	    choice1: 'Hypertext Markup Language',
-	    choice2: 'HyperLink Markup Language',
-	    choice3: 'Css Syle Sheet',
-	    choice4: 'Hovering To Modify Language',
-Answer: 1,
-    },
-    {
-        Question: 'What is CSS?',
-	    choice1: 'Hypertext Markup Language',
-	    choice2: 'Language that we use to syle a Web page',
-	    choice3: 'Used to interact with users on web',
-	    choice4: 'Link to print images',
-Answer: 2,
-    },
-    {
-        Question: 'What is JavaScript?',
-	    choice1: 'Syles a web page',
-	    choice2: 'Creates short cut to HTML',
-	    choice3: 'Use to create interactive effects within web browsers',
-	    choice4: 'Creates a PDF',
-Answer: 3,
-    },
-	{
-        Question: 'How popular was JQuery in 2023',
-	    choice1: '20.57%',
-	    choice2: '17.46%',
-	    choice3: '19.28%',
-	    choice4: '16.67%',
-Answer: 3,
-    },
-];
+    getQuestion();
+}
+// current array of questions and update to the next question.
+// event listener to choices 
+function getQuestion() {
+var currentQuestion = questions[currentQuestionIndex];
+var titleEl = document.getElementById("question-title");
+    titleEl.textContent = currentQuestion.title;
 
-const SCORE_POINTS = 100
-const MAX_QUESTIONS = 4
 
-startGame = () => {
-	questionCount = 0
-	score = 0
-	questionAvail = [...questions]
-	getNewQuestions('')
-};
+    choicesEl.innerHTML = "";
 
-getNewQuestions = () => {
-	if(questionAvail.length === 0 || questionCount > MAX_QUESTIONS) {
-		localStorage.setItem('mostRecentScore', score)
-		return window.location.assign('/end.html')
-	}
-	questionCount++
-	choices.innerText = `question ${questionCount} ${MAX_QUESTIONS}`
-	barStack.style.width = `${(questionCount/MAX_QUESTIONS) * 100}%`
-	const questionIndex = Math.floor(Math.random() * questionAvail.length)
-	currentQuestions = questionAvail[questionIndex]
-	questions.innerText = currentQuestions.questions
-	choices.forEach(choices => {
-		const number = choices.dataset['number']
-		choices.innerText = question['choices' + number]
-	})
-	questionAvail.splice(questionIndex, 1)
-	answers = true
-};
 
-choices.forEach(choices => {
-	choices.addEventListener('click', e => {
-		if(!answers) return
-		answers = false
-		const choiceSelect = e.target
-		const answerSelect = choiceSelect.dataset['number']
-		let classToApply = answerSelect == currentQuestions.answer ? 'correct' : 'incorrect'
+    currentQuestion.choices.forEach(function(choice, i) {
 
-		if(classToApply === 'correct') {
-			incrementScore(SCORE_POINTS)
-		}
-		choiceSelect.parentElement.classList.add(classToApply)
-		setTimeout(() => {
-			choiceSelect.parentElement.classList.remove(classToApply)
-			getNewQuestions()
-		}, 1000)
-	})
+var choiceNode = document.createElement("button");
+        choiceNode.setAttribute("class", "choice");
+        choiceNode.setAttribute("value", choice);
+        choiceNode.textContent = i + 1 + ". " + choice;
+
+
+    choiceNode.onclick = questionClick;
+
+
+    choicesEl.appendChild(choiceNode);
 });
+}
+// calling on the question on click to check if the answer clicked is wrong or write with code to doc 
+// time reduced to wrong answers
+function questionClick() {
+if (this.value !== questions[currentQuestionIndex].answer) {
 
-incrementScore = number => {
-	score += number
-	scoreCal.innerText = score
+    time -= 10;
+if (time < 0) {
+    time = 0;
+}
+
+	timerEl.textContent = time;
+	alertEl.textContent = "Wrong. Sorry!";
+} else {
+    alertEl.textContent = "Correct. Good Job!";
+}
+ 
+    alertEl.setAttribute("class", "feedback");
+    setTimeout(function() {
+        alertEl.setAttribute("class", "feedback hide");
+}, 800);
+
+currentQuestionIndex++;
+
+//Ending the quiz when questions are all answered and stopping the timer to complete the quiz
+// final score will reveal the current number left to be submitted to the highscores
+if (currentQuestionIndex === questions.length) {
+    quizEnd();
+    } else {
+    getQuestion();
+    }
+}
+
+function quizEnd() {
+	clearInterval(timerId);
+var endScreenEl = document.getElementById("closing-page");
+    endScreenEl.removeAttribute("class");
+var finalScoreEl = document.getElementById("final-score");
+    finalScoreEl.textContent = time;
+    questionsEl.setAttribute("class", "hide");
+}
+
+function clockTick() {
+    time--;
+    timerEl.textContent = time;
+if (time <= 0) {
+    quizEnd();
+ }
+}
+
+function saveHighscore() {
+var initials = initialsEl.value.trim();
+if (initials !== "") {
+    var highscores = 
+    JSON.parse(window.localStorage.getItem("highscores")) || [];
+var newScore = {
+    score: time,
+    initials: initials
 };
+    highscores.push(newScore);
+    window.localStorage.setItem("highscores", JSON.stringify(highscores));
 
-startGame();
+// After initials are submitted you're directed to the highscores page
+    window.location.href = "QuizHighScore.html";
+ }
+}
+
+function checkForEnter(event) {
+
+// "13" re[resents the enter key
+if (event.key === "Enter") {
+    saveHighscore();
+ }
+}
+
+// submitting initials
+submitBtn.onclick = saveHighscore;
+
+// start button is click to start quiz
+startBtn.onclick = startQuiz;
+
+initialsEl.onkeyup = checkForEnter;
